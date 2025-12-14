@@ -7,15 +7,27 @@ function Movie({ id, coverImg, title, summary, genres, rate, year }) {
     event.target.src = defaultImg;
   }
 
+  const safeGenres = Array.isArray(genres) ? genres : [];
+  const firstGenre =
+    safeGenres.length === 0
+      ? "Unknown"
+      : typeof safeGenres[0] === "string"
+      ? safeGenres[0]
+      : safeGenres[0]?.name || "Unknown";
+
+  const safeTitle = typeof title === "string" ? title : "";
+  const safeYear = year ?? "";
+  const safeRate = typeof rate === "number" ? rate : Number(rate);
+
   return (
     <div className={styles.container}>
       <Link to={`/movie/${id}`}><figure><img src={coverImg} alt="" onError={onErrorImg} /></figure></Link>
-      <div className={styles.genre}>{genres[0]}</div>
+      <div className={styles.genre}>{firstGenre}</div>
       <br />
       <div className={styles.info}>
-        <Link to={`/movie/${id}`}>{title.length < 25 ? title : `${title.slice(0, 25)}...`}</Link>
+        <Link to={`/movie/${id}`}>{safeTitle.length < 25 ? safeTitle : `${safeTitle.slice(0, 25)}...`}</Link>
         <br />
-        <Link to={`/movie/${id}`}><p>{year}</p></Link>
+        <Link to={`/movie/${id}`}><p>{safeYear}</p></Link>
       </div>
       {/* <p>{summary}</p>
       <ul>
@@ -25,7 +37,7 @@ function Movie({ id, coverImg, title, summary, genres, rate, year }) {
           </li>
         ))}
       </ul> */}
-      <div className={styles.rate}>⭐{Number.isInteger(rate) ? `${rate}.0` : rate}</div>
+      <div className={styles.rate}>⭐{Number.isInteger(safeRate) ? `${safeRate}.0` : safeRate}</div>
     </div>
 
   );

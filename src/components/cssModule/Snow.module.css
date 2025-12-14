@@ -1,0 +1,46 @@
+.snow {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 9999;
+}
+
+.snow span {
+  position: absolute;
+  top: -12px;
+
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(255, 255, 255, 0.55) 35%,
+    rgba(255, 255, 255, 0.0) 70%
+  );
+
+  border-radius: 50%;
+  opacity: 0.9;
+
+  filter: blur(var(--blur, 0px));
+  mix-blend-mode: screen;
+
+  animation: fall var(--dur, 10s) linear infinite,
+              drift var(--driftDur, 4s) ease-in-out infinite;
+
+  will-change: transform;
+}
+
+@keyframes fall {
+  from { transform: translate3d(0, -10px, 0); }
+  to   { transform: translate3d(0, 110vh, 0); }
+}
+
+@keyframes drift {
+  0%, 100% { margin-left: calc(var(--drift, 10px) * -1); }
+  50%      { margin-left: var(--drift, 10px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .snow span {
+    animation: fall 12s linear infinite;
+  }
+}

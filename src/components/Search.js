@@ -1,92 +1,121 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import styles from "./cssModule/Search.module.css";
-import Load from "./Load"
+import Load from "./Load";
 import MoviesGroup from "./MoviesGroup";
+import defaultBackImg from "../img/default_back.jpeg";
+import Snow from "../components/Snow"; // 크리스마스 눈 쓰고 싶으면
+
+import { searchMovies, img780 } from "../api/tmdb"; // 아래 api 함수도 추가할 거임
+
+const pageArr = [1,2,3,4,5,6,7,8,9,10];
 
 function Search() {
   const { search } = useParams();
+  const query = decodeURIComponent(search || "").trim();
+
   const [loading, setLoading] = useState(true);
   const [movies, setMovies] = useState([]);
-  const [movArr, setMovArr] = useState([]);
+  const [page, setPage] = useState(1);
+  const [error, setError] = useState(null);
 
-  const getMovies = () => {
-    for (let i = 1; i <= 100; i++) {
+  const isChristmasQuery = useMemo(() => {
+    const q = query.toLowerCase();
+    return q === "christmas" || q.includes("christmas");
+  }, [query]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    (async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        setMovies([]);
+        setPage(1);
+
+        if (!query) {
+          setLoading(false);
+          return;
+        }
+
+        const json = await searchMovies(query, 1);
+        if (cancelled) return;
+
+        setMovies(json.results || []);
+      } catch (e) {
+        if (cancelled) return;
+        setError(e?.message || "Search failed");
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [query]);
+
+  const goPage = async (p) => {
+    try {
       setLoading(true);
+      setError(null);
+      setPage(p);
+
+      const json = await searchMovies(query, p);
+      setMovies(json.results || []);
+    } catch (e) {
+      setError(e?.message || "Search failed");
       setMovies([]);
-      fetch(`https://yts.mx/api/v2/list_movies.json?page=${i}&sort_by=rating`)
-        .then((res) => res.json())
-        .then((json) => setMovies(json.data.movies))
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
-  }
-
-  const load = () => {
-    <Load />
-  }
-
-  useEffect(() => {
-    setLoading(true);
-    setMovArr([]);
-    getMovies();
-
-    return;
-  }, [search])
-
-  {/* Search Function */ }
-  useEffect(() => {
-    if (movies.length === 0) {
-      load();
-    } else {
-      setMovArr(
-        (
-          [movArr,
-            ...[movies.filter((movie) => (movie.summary.toLowerCase().indexOf(search.toLowerCase()) !== -1
-              || movie.description_full.toLowerCase().indexOf(search.toLowerCase()) !== -1
-              || movie.title.toLowerCase().indexOf(search.toLowerCase()) !== -1))]
-          ]
-        )
-          .flat()
-          .map((movie, i, arr) => {
-            for (let j = i + 1; j < arr.length; j++) {
-              if ((movie.id === arr[j].id) && arr[j] !== undefined && movie !== undefined) {
-                console.log(i, j);
-                console.log(movie.id, arr[j].id);
-                arr.splice(j, 1);
-                j -= 1;
-              }
-            }
-            return movie;
-          })
-          .sort((a, b) => b['rating'] - a['rating'])
-      )
-    }
-  }, [movies])
+  };
 
   return (
-    <div className={(search.toLowerCase() === "christmas") ? styles.christmasContainer : styles.container}>
-      {
-        (loading) ? <Load /> :
-          <div className={styles.gridContainer}>
-            {
-              movArr.map((movie) => (
-                <MoviesGroup
-                  key={movie.id}
-                  id={movie.id}
-                  title={movie.title}
-                  coverImg={movie.medium_cover_image}
-                  rating={movie.rating}
-                  runtime={movie.runtime}
-                  summary={movie.summary}
-                  year={movie.year}
-                  santa={search}
-                />
-              ))
+    <div
+      className={styles.container}
+      style={
+        isChristmasQuery
+          ? {
+              backgroundImage: `url(${defaultBackImg})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
             }
-          </div>
+          : undefined
       }
+    >
+      {isChristmasQuery && <Snow />}
+
+      {loading ? (
+        <Load />
+      ) : error ? (
+        <div style={{ padding: 20 }}>Error: {error}</div>
+      ) : (
+        <>
+          <div className={styles.gridContainer}>
+            {movies.map((m) => (
+              <MoviesGroup key={m.id} movie={m} />
+            ))}
+          </div>
+
+          <div className={styles.footer}>
+            <div className={styles.pages}>
+              {pageArr.map((p) => (
+                <button
+                  key={p}
+                  onClick={() => goPage(p)}
+                  className={p === page ? styles.activePage : styles.pageBtn}
+                >
+                  {p}
+                </button>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
     </div>
-  )
+  );
 }
 
 export default Search;

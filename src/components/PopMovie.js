@@ -7,6 +7,18 @@ function PopMovie({ id, coverImg, title, summary, genres, rate, year }) {
     event.target.src = defaultImg;
   }
 
+  const safeGenres = Array.isArray(genres) ? genres : [];
+  const firstGenre =
+    safeGenres.length === 0
+      ? "Unknown"
+      : typeof safeGenres[0] === "string"
+      ? safeGenres[0]
+      : safeGenres[0]?.name || "Unknown";
+
+  const safeTitle = typeof title === "string" ? title : "";
+  const safeYear = year ?? "";
+  const safeRate = typeof rate === "number" ? rate : Number(rate);
+
   return (
     <Link to={`/movie/${id}`}>
       <div className={styles.container}>
@@ -19,13 +31,13 @@ function PopMovie({ id, coverImg, title, summary, genres, rate, year }) {
           <p>{year}</p>
         </div> */}
         <div className={styles.info}>
-          {title}
+          {safeTitle}
           <br />
-          {year}
+          {safeYear}
         </div>
         <div className={styles.info2}>
-          <div className={styles.genre}>{genres[0]}</div>
-          <div className={styles.rate}>⭐{Number.isInteger(rate) ? `${rate}.0` : rate}</div>
+          <div className={styles.genre}>{firstGenre}</div>
+          <div className={styles.rate}>⭐{Number.isInteger(safeRate) ? `${safeRate}.0` : safeRate}</div>
         </div>
       </div>
     </Link>
