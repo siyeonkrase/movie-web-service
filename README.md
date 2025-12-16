@@ -1,4 +1,5 @@
 ## Movie Web Service
+<img width="1920" height="1032" alt="image" src="https://github.com/user-attachments/assets/0183fa1d-cf35-4241-867c-c01b48133ea7" />
 
 A movie discovery web application that helps users explore and preview films through an intuitive and media-rich interface.
 
