@@ -3,11 +3,11 @@ import { Link, useParams } from "react-router-dom";
 import Load from "../components/Load";
 import MoviesGroup from "../components/MoviesGroup";
 import styles from "../components/cssModule/Group.module.css";
-import { discoverTopRated } from "../api/tmdb";
+import { discoverPopular } from "../api/tmdb";
 
 const pageArr = [1,2,3,4,5,6,7,8,9,10];
 
-export default function TopRated() {
+export default function Popular() {
   const { page } = useParams();
   const pageNum = Number(page) || 1;
 
@@ -21,15 +21,16 @@ export default function TopRated() {
       try {
         setLoading(true);
         setError(null);
-        const json = await discoverTopRated(pageNum);
+        const json = await discoverPopular(pageNum);
         if (cancelled) return;
         setMovies(json.results || []);
       } catch (e) {
         if (cancelled) return;
-        setError(e?.message || "Failed to load top rated");
+        setError(e?.message || "Failed to load popular movies");
         setMovies([]);
       } finally {
-        if (!cancelled) setLoading(false);
+        if (cancelled) return;
+        setLoading(false);
       }
     })();
     return () => { cancelled = true; };
@@ -50,7 +51,7 @@ export default function TopRated() {
           <div className={styles.pages}>
             {pageArr.map((p) => (
               <div className={styles.pageNum} key={p}>
-                <Link to={`/top-rated/${p}`}>{p}</Link>
+                <Link to={`/popular-movies/${p}`}>{p}</Link>
               </div>
             ))}
           </div>

@@ -1,7 +1,7 @@
 import styles from "./cssModule/Snow.module.css";
 
 export default function Snow() {
-  const count = 55; // 원하면 70까지 올려도 됨
+  const count = 55;
 
   return (
     <div className={styles.snow}>

@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { NavLink, Link, useNavigate } from "react-router-dom";
 import styles from "./cssModule/Navbar.module.css";
 import { Group_obj, Group_key_arr } from "../atom/NavList";
 import { useState, useEffect } from "react";
@@ -39,25 +39,31 @@ function Navbar() {
       </div>
 
       <div className={`${styles.groupLinks} ${menuOpen ? styles.active : ""}`}>
-        {Group_key_arr.map((key) => (
-          <div className={styles.link} key={key}>
-            <Link
-              to={key === "High Rating" ? "/top-rated/1" : `/page/${Group_obj[key]}/1`} onClick={() => setMenuOpen(false)}>
-              {key}
-            </Link>
-          </div>
-        ))}
+        {Group_key_arr.map((key) => {
+          const to = (key === "Popular") ? "/popular-movies/1" : `/page/${Group_obj[key]}/1`;
+          return (
+            <div className={styles.link} key={key}>
+              <NavLink
+                to={to}
+                onClick={() => setMenuOpen(false)}
+                className={({ isActive }) => `${styles.navItem} ${isActive ? styles.navActive : ""}`}
+              >
+                {key}
+              </NavLink>
+            </div>
+          )
+          })}
 
-        {/* 🎄 Christmas (holiday 라는 별도 타입) */}
         <div className={styles.christmas}>
-          <Link
+          <NavLink
             to={`/page/10751/1`}
             onClick={() => setMenuOpen(false)}
+            className={({ isActive }) => `${styles.navItem} ${isActive ? styles.christmasActive : ""}`}
           >
             <span>🎄</span><span>C</span><span>h</span><span>r</span><span>i</span>
             <span>s</span><span>t</span><span>m</span><span>a</span><span>s</span>
             <span>🎄</span>
-          </Link>
+          </NavLink>
         </div>
       </div>
 

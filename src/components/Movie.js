@@ -29,14 +29,6 @@ function Movie({ id, coverImg, title, summary, genres, rate, year }) {
         <br />
         <Link to={`/movie/${id}`}><p>{safeYear}</p></Link>
       </div>
-      {/* <p>{summary}</p>
-      <ul>
-        {genres.map((genre) => (
-          <li key={genre}>
-            {genre}
-          </li>
-        ))}
-      </ul> */}
       <div className={styles.rate}>⭐{Number.isInteger(safeRate) ? `${safeRate}.0` : safeRate}</div>
     </div>
 

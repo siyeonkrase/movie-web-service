@@ -10,17 +10,15 @@
 }
 
 .container {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr; /* 왼쪽/오른쪽은 공간 채우고, 가운데는 내용만 */
   align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
   background-color: black;
   padding: 0 20px;
-  height: auto;
   gap: 10px;
-  z-index: 10;
-  caret-color: transparent;
 }
+
+.pageName { justify-self: start; }
 
 .pageName a {
   line-height: 50px;
@@ -39,13 +37,17 @@
   flex-direction: row;
   flex-wrap: wrap;
   gap: 25px;
+  justify-self: center;
 }
 
 .groupLinks a {
   font-family: KBO-Dia-Gothic_bold;
   font-size: 18px;
-  color: white;
   text-decoration: none;
+}
+
+.groupLinks a:focus {
+  color: orange;
 }
 
 .link:hover {
@@ -60,6 +62,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  justify-self: end;
 }
 
 .searchInput input {
@@ -86,7 +89,6 @@
   cursor: pointer;
 }
 
-/* 모바일 전용 */
 @media (max-width: 768px) {
   .container {
     flex-direction: column;
@@ -133,4 +135,28 @@
 
 .christmas a:hover span:nth-child(even) {
   color: red;
+}
+
+.christmasActive span:nth-child(odd) {
+  color: green;
+}
+
+.christmasActive span:nth-child(even) {
+  color: red;
+}
+
+.navItem {
+  font-family: KBO-Dia-Gothic_bold;
+  font-size: 18px;
+  color: white;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.navItem:hover {
+  transform: scale(1.1);
+}
+
+.navActive {
+  color: orange;
 }

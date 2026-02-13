@@ -18,16 +18,15 @@ function Group() {
   const [loading, setLoading] = useState(true);
   const [movies, setMovies] = useState([]);
   const [error, setError] = useState(null);
-  const isChristmas = Number(group) === 10751;
+  const isChristmas = (Number(group) === 10751);
+
   useEffect(() => {
     let cancelled = false;
 
     async function run() {
-      // ✅ 여기서만 setState
       setLoading(true);
       setError(null);
 
-      // ✅ 숫자 아닌 group(예: "holiday")는 여기서 처리하고 끝
       if (!Number.isFinite(genreId)) {
         setMovies([]);
         setError(`Invalid genre: ${group}`);
@@ -53,7 +52,7 @@ function Group() {
     return () => {
       cancelled = true;
     };
-  }, [genreId, pageNum, group]);
+  }, [pageNum, group]);
 
   return (
     <>

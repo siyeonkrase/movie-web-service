@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
-import styles from "./cssModule/Search.module.css";
-import Load from "./Load";
-import MoviesGroup from "./MoviesGroup";
+import styles from "../components/cssModule/Search.module.css";
+import Load from "../components/Load";
+import MoviesGroup from "../components/MoviesGroup";
 import defaultBackImg from "../img/default_back.jpeg";
-import Snow from "../components/Snow"; // 크리스마스 눈 쓰고 싶으면
+import Snow from "../components/Snow";
 
-import { searchMovies, img780 } from "../api/tmdb"; // 아래 api 함수도 추가할 거임
+import { searchMovies, img780 } from "../api/tmdb";
 
 const pageArr = [1,2,3,4,5,6,7,8,9,10];
 
@@ -98,7 +98,7 @@ function Search() {
               <MoviesGroup key={m.id} movie={m} />
             ))}
           </div>
-
+        
           <div className={styles.footer}>
             <div className={styles.pages}>
               {pageArr.map((p) => (

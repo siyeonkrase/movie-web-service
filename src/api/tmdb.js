@@ -27,10 +27,10 @@ export async function discoverNewMovies(page = 1) {
   );
   const res = await fetch(url);
   if (!res.ok) throw new Error(`TMDB discoverNewMovies HTTP ${res.status}`);
-  return res.json(); // { results: [...] }
+  return res.json();
 }
 
-export async function discoverTopRated(page = 1) {
+export async function discoverPopular(page = 1) {
   const url = withKey(
     `/discover/movie?sort_by=popularity.desc&vote_count.gte=100&page=${page}`
   );
@@ -50,11 +50,12 @@ export async function getTrailerKey(movieId) {
   if (!res.ok) return null;
   const json = await res.json();
 
-  const yt = (json.results || []).filter((v) => v.site === "YouTube");
+  const youtube = (json.results || []).filter((video) => video.site === "YouTube");
+  // console.log(youtube);
   const pick =
-    yt.find((v) => v.type === "Trailer") ||
-    yt.find((v) => v.type === "Teaser") ||
-    yt[0];
+    youtube.find((video) => video.type === "Trailer") ||
+    youtube.find((video) => video.type === "Teaser") ||
+    youtube[0];
 
   return pick?.key ?? null;
 }

@@ -8,4 +8,8 @@
   caret-color: transparent;
 }
 
+body {
+  min-width: 1024px;
+  overflow-x: auto;
+}
 

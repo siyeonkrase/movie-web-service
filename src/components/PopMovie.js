@@ -23,13 +23,6 @@ function PopMovie({ id, coverImg, title, summary, genres, rate, year }) {
     <Link to={`/movie/${id}`}>
       <div className={styles.container}>
         <img src={coverImg} alt="" className={styles.img} onError={onErrorImg} />
-        {/* <div className={styles.title}>
-          {title}
-        </div>
-        <br />
-        <div className={styles.year}>
-          <p>{year}</p>
-        </div> */}
         <div className={styles.info}>
           {safeTitle}
           <br />
