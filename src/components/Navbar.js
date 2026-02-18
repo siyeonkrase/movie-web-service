@@ -20,7 +20,7 @@ function Navbar() {
 
   useEffect(() => {
     const isMobile = window.innerWidth < 768;
-    setMenuOpen(!isMobile);
+    setMenuOpen(isMobile);
   }, []);
 
   const goGroup = (key) => {

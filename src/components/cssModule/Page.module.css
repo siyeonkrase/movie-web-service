@@ -30,3 +30,8 @@
   font-family: Pretendard-Regular;
   color: orange;
 }
+
+.activePage {
+  color: orange;
+  font-weight: 600;
+}

@@ -53,7 +53,6 @@ export async function getTrailerKey(movieId) {
   const youtube = (json.results || []).filter((video) => video.site === "YouTube");
   const pick =
     youtube.find((video) => video.type === "Trailer") ||
-    youtube.find((video) => video.type === "Teaser") ||
     youtube[0];
 
   return pick?.key ?? null;
