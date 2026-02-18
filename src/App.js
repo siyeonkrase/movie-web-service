@@ -21,7 +21,7 @@ function App() {
           <Route path="/page/:group/:page" element={<Group />} />
           <Route path="/popular-movies/:page" element={<Popular />} />
           <Route path="/movie/:id" element={<Detail />} />
-          <Route path="/search/:search" element={<Search />} />
+          <Route path="/search/:search/:page" element={<Search />} />
         </Routes>
       </div>
     </Router>

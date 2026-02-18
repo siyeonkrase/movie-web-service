@@ -1,13 +1,8 @@
-import { Link, useParams } from "react-router-dom";
-import styles from "../components/cssModule/Group.module.css";
-import Load from "../components/Load.js";
-import MoviesGroup from "../components/MoviesGroup.js";
+import { useParams } from "react-router-dom";
 import { discoverByGenre } from "../api/tmdb";
 import { useEffect, useMemo, useState } from "react";
 import defaultBackImg from "../img/default_back.jpeg";
-import Snow from "../components/Snow";
-
-const pageArr = [1,2,3,4,5,6,7,8,9,10];
+import MovieGrid from "../components/MovieGrid";
 
 function Group() {
   const { page, group } = useParams();
@@ -18,6 +13,7 @@ function Group() {
   const [loading, setLoading] = useState(true);
   const [movies, setMovies] = useState([]);
   const [error, setError] = useState(null);
+
   const isChristmas = (Number(group) === 10751);
 
   useEffect(() => {
@@ -54,49 +50,26 @@ function Group() {
     };
   }, [pageNum, group]);
 
-  return (
-    <>
-    {isChristmas && <Snow />}
-    
-    <div className={styles.container}
-      style={
-        isChristmas
-          ? {
-              backgroundImage: `url(${defaultBackImg})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              backgroundRepeat: "no-repeat",
-            }
-          : undefined
+  const backgroundStyle = isChristmas
+    ? {
+        backgroundImage: `url(${defaultBackImg})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
       }
-    >
-      {loading ? (
-        <Load />
-      ) : error ? (
-        <div style={{ padding: 20 }}>Error: {error}</div>
-      ) : movies.length === 0 ? (
-        <div style={{ padding: 20, color: "white" }}>No movies found.</div>
-      ) : (
-        <div className={styles.gridContainer}>
-          {movies.map((m) => (
-            <MoviesGroup key={m.id} movie={m} />
-          ))}
-        </div>
-      )}
+    : undefined;
 
-      {loading ? null : (
-        <div className={styles.footer}>
-          <div className={styles.pages}>
-            {pageArr.map((p) => (
-              <div className={styles.pageNum} key={p}>
-                <Link to={`/page/${group}/${p}`}>{p}</Link>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-    </div>
-    </>
+  return (
+    <MovieGrid
+      loading={loading}
+      error={error}
+      movies={movies}
+      showSnow={isChristmas}
+      backgroundStyle={backgroundStyle}
+      pageNum={pageNum}
+      pages={10}
+      makeTo={(page) => `/page/${group}/${page}`}
+    />
   );
 }
 

@@ -1,8 +1,9 @@
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import styles from "./cssModule/Movie.module.css"
+import styles from "./cssModule/NewMovie.module.css"
 import defaultImg from "../img/default_Img.jpeg";
-function Movie({ id, coverImg, title, summary, genres, rate, year }) {
+
+function NewMovie({ id, coverImg, title, summary, genres, rate, year }) {
   const onErrorImg = (event) => {
     event.target.src = defaultImg;
   }
@@ -35,7 +36,7 @@ function Movie({ id, coverImg, title, summary, genres, rate, year }) {
   );
 }
 
-Movie.propTypes = {
+NewMovie.propTypes = {
   id: PropTypes.number.isRequired,
   coverImg: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
@@ -43,4 +44,4 @@ Movie.propTypes = {
   genres: PropTypes.arrayOf(PropTypes.string).isRequired,
 }
 
-export default Movie;
+export default NewMovie;

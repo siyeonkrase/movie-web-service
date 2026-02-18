@@ -1,11 +1,7 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import Load from "../components/Load";
-import MoviesGroup from "../components/MoviesGroup";
-import styles from "../components/cssModule/Group.module.css";
+import { useParams } from "react-router-dom";
 import { discoverPopular } from "../api/tmdb";
-
-const pageArr = [1,2,3,4,5,6,7,8,9,10];
+import MovieGrid from "../components/MovieGrid";
 
 export default function Popular() {
   const { page } = useParams();
@@ -17,6 +13,7 @@ export default function Popular() {
 
   useEffect(() => {
     let cancelled = false;
+
     (async () => {
       try {
         setLoading(true);
@@ -37,26 +34,13 @@ export default function Popular() {
   }, [pageNum]);
 
   return (
-    <div className={styles.container}>
-      {loading ? <Load /> : error ? (
-        <div style={{ padding: 20 }}>Error: {error}</div>
-      ) : (
-        <div className={styles.gridContainer}>
-          {movies.map((m) => <MoviesGroup key={m.id} movie={m} />)}
-        </div>
-      )}
-
-      {loading ? null : (
-        <div className={styles.footer}>
-          <div className={styles.pages}>
-            {pageArr.map((p) => (
-              <div className={styles.pageNum} key={p}>
-                <Link to={`/popular-movies/${p}`}>{p}</Link>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-    </div>
+    <MovieGrid
+      loading={loading}
+      error={error}
+      movies={movies}
+      pageNum={pageNum}
+      pages={10}
+      makeTo={(page) => `/popular-movies/${page}`}
+    />
   );
 }

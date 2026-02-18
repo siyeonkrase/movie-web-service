@@ -1,22 +1,17 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
-import styles from "../components/cssModule/Search.module.css";
-import Load from "../components/Load";
-import MoviesGroup from "../components/MoviesGroup";
 import defaultBackImg from "../img/default_back.jpeg";
-import Snow from "../components/Snow";
 
 import { searchMovies, img780 } from "../api/tmdb";
-
-const pageArr = [1,2,3,4,5,6,7,8,9,10];
+import MovieGrid from "../components/MovieGrid";
 
 function Search() {
-  const { search } = useParams();
+  const { search, page } = useParams();
   const query = decodeURIComponent(search || "").trim();
+  const pageNum = Number(page) || 1;
 
   const [loading, setLoading] = useState(true);
   const [movies, setMovies] = useState([]);
-  const [page, setPage] = useState(1);
   const [error, setError] = useState(null);
 
   const isChristmasQuery = useMemo(() => {
@@ -32,16 +27,14 @@ function Search() {
         setLoading(true);
         setError(null);
         setMovies([]);
-        setPage(1);
 
         if (!query) {
           setLoading(false);
           return;
         }
 
-        const json = await searchMovies(query, 1);
+        const json = await searchMovies(query, pageNum);
         if (cancelled) return;
-
         setMovies(json.results || []);
       } catch (e) {
         if (cancelled) return;
@@ -54,67 +47,27 @@ function Search() {
     return () => {
       cancelled = true;
     };
-  }, [query]);
+  }, [query, pageNum]);
 
-  const goPage = async (p) => {
-    try {
-      setLoading(true);
-      setError(null);
-      setPage(p);
-
-      const json = await searchMovies(query, p);
-      setMovies(json.results || []);
-    } catch (e) {
-      setError(e?.message || "Search failed");
-      setMovies([]);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const backgroundStyle = isChristmasQuery
+    ? {
+        backgroundImage: `url(${defaultBackImg})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }
+    : undefined;
 
   return (
-    <div
-      className={styles.container}
-      style={
-        isChristmasQuery
-          ? {
-              backgroundImage: `url(${defaultBackImg})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-            }
-          : undefined
-      }
-    >
-      {isChristmasQuery && <Snow />}
-
-      {loading ? (
-        <Load />
-      ) : error ? (
-        <div style={{ padding: 20 }}>Error: {error}</div>
-      ) : (
-        <>
-          <div className={styles.gridContainer}>
-            {movies.map((m) => (
-              <MoviesGroup key={m.id} movie={m} />
-            ))}
-          </div>
-        
-          <div className={styles.footer}>
-            <div className={styles.pages}>
-              {pageArr.map((p) => (
-                <button
-                  key={p}
-                  onClick={() => goPage(p)}
-                  className={p === page ? styles.activePage : styles.pageBtn}
-                >
-                  {p}
-                </button>
-              ))}
-            </div>
-          </div>
-        </>
-      )}
-    </div>
+    <MovieGrid
+      loading={loading}
+      error={error}
+      movies={movies}
+      showSnow={isChristmasQuery}
+      backgroundStyle={backgroundStyle}
+      pageNum={pageNum}
+      pages={10}
+      makeTo={(page) => `/search/${encodeURIComponent(query)}/${page}`}
+    />
   );
 }
 

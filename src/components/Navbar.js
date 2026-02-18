@@ -13,7 +13,7 @@ function Navbar() {
   const changeValue = (event) => setSearch(event.target.value);
 
   const handleSearch = () => {
-    if (search.trim()) navigate(`/search/${encodeURIComponent(search.trim())}`);
+    if (search.trim()) navigate(`/search/${encodeURIComponent(search.trim())}/1`);
   };
 
   const toggleMenu = () => setMenuOpen((prev) => !prev);

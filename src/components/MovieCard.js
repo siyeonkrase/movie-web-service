@@ -1,10 +1,10 @@
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import styles from "./cssModule/MoviesGroup.module.css"
+import styles from "./cssModule/MovieCard.module.css"
 import defaultImg from "../img/default_Img.jpeg";
 import { img780 } from "../api/tmdb";
 
-function MoviesGroup({ movie }) {
+function MovieCard({ movie }) {
   if (!movie) return null;
   const id = movie.id;
   const title = movie.title || "Untitled";
@@ -30,7 +30,7 @@ function MoviesGroup({ movie }) {
   );
 }
 
-MoviesGroup.propTypes = {
+MovieCard.propTypes = {
   id: PropTypes.number,
   coverImg: PropTypes.string,
   title: PropTypes.string,
@@ -38,4 +38,4 @@ MoviesGroup.propTypes = {
   genres: PropTypes.arrayOf(PropTypes.string)
 }
 
-export default MoviesGroup;
+export default MovieCard;

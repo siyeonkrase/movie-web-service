@@ -2,7 +2,8 @@ import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import styles from "./cssModule/PopMovie.module.css"
 import defaultImg from "../img/default_Img.jpeg";
-function PopMovie({ id, coverImg, title, summary, genres, rate, year }) {
+
+function PopMovie({ id, coverImg, title, genres, rate, year }) {
   const onErrorImg = (event) => {
     event.target.src = defaultImg;
   }

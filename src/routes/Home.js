@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Load from "../components/Load";
-import Movie from "../components/Movie";
-import PopMovie from "../components/PopMovie";
+import NewMovie from "../components/NewMovie.js";
+import PopMovie from "../components/PopMovie.js";
 import styles from "../components/cssModule/Home.module.css";
 import { GENRE_MAP } from "../atom/genreMap";
 import YouTube from "react-youtube";
@@ -88,7 +88,7 @@ function Home() {
           <h1 className={styles.newMovies}>New Movies</h1>
           <div className={styles.gridContainer}>
             {movies.map((movie) => (
-              <Movie
+              <NewMovie
                 key={movie.id}
                 id={movie.id}
                 coverImg={img780(movie.poster_path)}
